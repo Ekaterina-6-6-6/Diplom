@@ -1,0 +1,7 @@
+pytest
+selenium
+requests
+allure-pytest
+undetected-chromedriver
+python-dotenv
+webdriver-manager
