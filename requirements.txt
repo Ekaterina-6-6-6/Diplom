@@ -5,3 +5,6 @@ allure-pytest
 undetected-chromedriver
 python-dotenv
 webdriver-manager
+
+pytest-xdist
+ruff
