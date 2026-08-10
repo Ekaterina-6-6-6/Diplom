@@ -23,15 +23,12 @@ Diplom/
 │
 ├── pages/
 │   ├── __init__.py
-│   ├── MainPage.py
-│   ├── company_page.py
-│   ├── login_page.py
-│   ├── project_page.py
-│   └── task_page.py
+│   └── MainPage.py
+│
 │
 ├── tests/
 │   ├── test_api/
-│   │   ├── est_create_task_invalid_column_id.py
+│   │   ├── test_create_task_invalid_column_id.py
 │   │   ├── gest_get_boards.py
 │   │   ├── test_create_api_key.py
 │   │   ├── test_create_api_key_invalid_password.py
@@ -49,8 +46,7 @@ Diplom/
 │   │   ├── test_create_crm_project.py
 │   │   ├── test_create_project_ui.py
 │   │   ├── test_login_yougile.py
-│   │   ├── test_open_create_project_form.py
-│   │   └── test_ui.py
+│   │   └── test_open_create_project_form.py
 │   │
 │   └── __init__.py
 │
