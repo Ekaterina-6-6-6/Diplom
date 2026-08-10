@@ -1,0 +1,153 @@
+import os
+import time
+
+import allure
+import pytest
+
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
+
+pytestmark = pytest.mark.ui
+
+
+def test_open_yougile(driver) -> None:
+    """Проверяет открытие страницы YouGile."""
+
+    driver.get("https://ru.yougile.com")
+
+    assert driver.title == (
+        "Современная система управления проектами и задачами. "
+        "Бесплатная онлайн-версия"
+    )
+
+
+@pytest.mark.ui
+@allure.title("Отмена создания проекта")
+@allure.description(
+    "Проверка отмены создания нового проекта"
+    "через пользовательский интерфейс YouGile."
+)
+def test_cancel_create_project(driver) -> None:
+    """Проверяет отмену создания проекта через UI."""
+
+    login = os.environ["YOUGILE_LOGIN"]
+    password = os.environ["YOUGILE_PASSWORD"]
+
+    wait = WebDriverWait(driver, 15)
+
+    project_name = f"UI Cancel Project {int(time.time())}"
+
+    with allure.step("Открыть главную страницу YouGile"):
+        driver.get("https://ru.yougile.com/")
+
+    with allure.step("Открыть форму авторизации"):
+        login_button = wait.until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//*[normalize-space()='Войти']")
+            )
+        )
+        login_button.click()
+
+    with allure.step("Заполнить E-mail"):
+        email_field = wait.until(
+            EC.visibility_of_element_located(
+                (By.CSS_SELECTOR, "input[type='email']")
+            )
+        )
+        email_field.send_keys(login)
+
+    with allure.step("Заполнить пароль"):
+        password_field = wait.until(
+            EC.visibility_of_element_located(
+                (By.CSS_SELECTOR, "input[type='password']")
+            )
+        )
+        password_field.send_keys(password)
+
+    with allure.step("Выполнить авторизацию"):
+        submit_button = wait.until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//*[normalize-space()='Войти']")
+            )
+        )
+        submit_button.click()
+
+    with allure.step("Дождаться рабочего пространства"):
+        wait.until(EC.url_contains("/team/"))
+
+    with allure.step("Открыть раздел проектов"):
+        projects_button = wait.until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//*[normalize-space()='Проекты']")
+            )
+        )
+
+        driver.execute_script(
+            "arguments[0].click();",
+            projects_button,
+        )
+
+    with allure.step("Открыть создание проекта"):
+        add_project_button = wait.until(
+            EC.element_to_be_clickable(
+                (
+                    By.XPATH,
+                    "//*[normalize-space()='Добавить проект с задачами']",
+                )
+            )
+        )
+        add_project_button.click()
+
+    with allure.step("Проверить открытие формы"):
+        wait.until(
+            EC.visibility_of_element_located(
+                (
+                    By.XPATH,
+                    "//*[normalize-space()='Новый проект с задачами']",
+                )
+            )
+        )
+
+    with allure.step("Ввести название проекта"):
+        project_name_field = wait.until(
+            EC.visibility_of_element_located(
+                (
+                    By.XPATH,
+                    "//input[@placeholder='Введите название проекта…']",
+                )
+            )
+        )
+        project_name_field.send_keys(project_name)
+
+    with allure.step("Отменить создание проекта"):
+        cancel_button = wait.until(
+            EC.element_to_be_clickable(
+                (
+                    By.XPATH,
+                    "//*[normalize-space()='Отмена']",
+                )
+            )
+        )
+        cancel_button.click()
+
+    with allure.step("Проверить закрытие формы"):
+        wait.until(
+            EC.invisibility_of_element_located(
+                (
+                    By.XPATH,
+                    "//*[normalize-space()='Новый проект с задачами']",
+                )
+            )
+        )
+
+    with allure.step("Проверить отсутствие проекта"):
+        project_elements = driver.find_elements(
+            By.XPATH,
+            f"//*[normalize-space()='{project_name}']",
+        )
+
+        assert not project_elements, (
+            f"Проект '{project_name}' не должен быть создан."
+        )
