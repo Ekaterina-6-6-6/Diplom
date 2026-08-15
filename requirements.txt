@@ -1,10 +1,10 @@
-pytest
-selenium
-requests
-allure-pytest
-undetected-chromedriver
-python-dotenv
-webdriver-manager
+pytest==9.0.3
+selenium==4.44.0
+requests==2.34.2
+allure-pytest==2.16.0
+undetected-chromedriver==3.5.5
+python-dotenv==1.2.2
+webdriver-manager==4.1.1
 
-pytest-xdist
-ruff
+pytest-xdist==3.8.0
+ruff==0.16.1

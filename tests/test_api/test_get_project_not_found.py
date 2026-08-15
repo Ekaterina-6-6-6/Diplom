@@ -1,10 +1,14 @@
 import allure
-
+import pytest
 
 from utils.api_client import YouGileApiClient
 
+pytestmark = pytest.mark.api
 
+
+@pytest.mark.api
 @allure.title("Получение проекта с несуществующим ID")
+@allure.story("Управление проектами")
 @allure.description(
     "Проверка корректной обработки запроса проекта с несуществующим ID."
 )

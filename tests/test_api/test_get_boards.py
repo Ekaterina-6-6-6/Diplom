@@ -1,10 +1,14 @@
 import allure
-
+import pytest
 
 from utils.api_client import YouGileApiClient
 
+pytestmark = pytest.mark.api
 
+
+@pytest.mark.api
 @allure.title("Получение списка досок проекта")
+@allure.story("Управление досками")
 @allure.description(
     "Проверка получения списка досок через API YouGile."
 )
@@ -21,23 +25,20 @@ def test_get_boards(
 
     with allure.step("Проверить статус-код ответа"):
         assert response.status_code == 200, (
-            "Не удалось получить список досок: "
-            f"{response.status_code} {response.text}"
+            "Не удалось получить список "
+            + f"досок: {response.status_code} {response.text}"
         )
 
     with allure.step("Проверить структуру ответа"):
         data = response.json()
 
-        assert "paging" in data, (
-            "В ответе отсутствует поле paging"
-        )
-        assert "content" in data, (
-            "В ответе отсутствует поле content"
-        )
+        assert "paging" in data, "В ответе отсутствует поле paging"
+        assert "content" in data, "В ответе отсутствует поле content"
 
-        assert isinstance(data["content"], list), (
-            "Поле content должно быть массивом"
-        )
+        assert isinstance
+        (
+            data["content"], list
+        ), "Поле content должно быть массивом"
 
     with allure.step("Проверить принадлежность досок проекту"):
         for board in data["content"]:

@@ -1,16 +1,16 @@
 import os
+
+import allure
 import pytest
 import requests
-import allure
+from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from dotenv import load_dotenv
 
 from config.settings import settings
 from utils.api_client import YouGileApiClient
-
 
 load_dotenv()
 

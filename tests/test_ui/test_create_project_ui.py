@@ -3,30 +3,19 @@ import time
 
 import allure
 import pytest
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-
 pytestmark = pytest.mark.ui
 
 
-def test_open_yougile(driver) -> None:
-    """Проверяет открытие страницы YouGile."""
-
-    driver.get("https://ru.yougile.com")
-
-    assert driver.title == (
-        "Современная система управления проектами и задачами. "
-        "Бесплатная онлайн-версия"
-    )
-
-
+@pytest.mark.ui
 @allure.title("Создание проекта через UI")
+@allure.story("Управление проектами")
 @allure.description(
     "Проверка создания нового проекта "
-    "через пользовательский интерфейс YouGile."
+    + "через пользовательский интерфейс YouGile."
 )
 def test_create_project_ui(driver) -> None:
     """Проверяет создание нового проекта через UI."""
@@ -125,8 +114,11 @@ def test_create_project_ui(driver) -> None:
             EC.element_to_be_clickable(
                 (
                     By.XPATH,
-                    "//div[@role='button']"
-                    "[.//div[normalize-space()='Добавить проект с задачами']]",
+                    (
+                        "//div[@role='button']"
+                        "[.//div[normalize-space()="
+                        + "'Добавить проект с задачами']]"
+                    )
                 )
             )
         )

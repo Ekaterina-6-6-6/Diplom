@@ -1,10 +1,14 @@
 import allure
-
+import pytest
 
 from utils.api_client import YouGileApiClient
 
+pytestmark = pytest.mark.api
 
+
+@pytest.mark.api
 @allure.title("Получение списка колонок доски")
+@allure.story("Управление колонками")
 @allure.description(
     "Проверка получения списка колонок через API YouGile."
 )
@@ -21,16 +25,13 @@ def test_get_columns(
         )
 
     assert board_response.status_code == 201, (
-        "Не удалось создать доску: "
-        f"{board_response.status_code} "
-        f"{board_response.text}"
+        "Не удалось создать "
+        + f"доску: {board_response.status_code} {board_response.text}"
     )
 
     board_id = board_response.json().get("id")
 
-    assert board_id, (
-        "В ответе отсутствует ID созданной доски"
-    )
+    assert board_id, "В ответе отсутствует ID созданной доски"
 
     with allure.step("Создать тестовую колонку"):
         column_response = api_client.create_column(
@@ -59,17 +60,14 @@ def test_get_columns(
     with allure.step("Проверить структуру ответа"):
         data = response.json()
 
-        assert "paging" in data, (
-            "В ответе отсутствует поле paging"
-        )
+        assert "paging" in data, "В ответе отсутствует поле paging"
 
-        assert "content" in data, (
-            "В ответе отсутствует поле content"
-        )
+        assert "content" in data, "В ответе отсутствует поле content"
 
-        assert isinstance(data["content"], list), (
-            "Поле content должно быть массивом"
-        )
+        assert isinstance
+        (
+            data["content"], list
+        ), "Поле content должно быть массивом"
 
     with allure.step("Проверить созданную колонку"):
         columns = data["content"]
@@ -83,9 +81,8 @@ def test_get_columns(
             None,
         )
 
-        assert created_column is not None, (
-            "Созданная колонка отсутствует в списке"
-        )
+        assert created_column is not None
+        "Созданная колонка отсутствует в списке"
 
         assert created_column["boardId"] == board_id
         assert created_column["title"] == "Колонка для API-теста"

@@ -1,9 +1,14 @@
 import allure
+import pytest
 
 from utils.api_client import YouGileApiClient
 
+pytestmark = pytest.mark.api
 
+
+@pytest.mark.api
 @allure.title("Получение проекта по ID")
+@allure.story("Управление проектами")
 @allure.description(
     "Проверка получения ранее созданного проекта через API YouGile."
 )
@@ -14,9 +19,7 @@ def test_get_project(
     """Проверяет получение проекта по его ID."""
 
     with allure.step("Получить проект по ID"):
-        response = api_client.get_project(
-            created_project_id
-        )
+        response = api_client.get_project(created_project_id)
 
     with allure.step("Проверить статус-код ответа"):
         assert response.status_code == 200
