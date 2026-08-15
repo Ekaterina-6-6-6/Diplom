@@ -11,21 +11,21 @@ pytestmark = pytest.mark.ui
 
 
 @pytest.mark.ui
-@allure.title("Отмена создания CRM-проекта")
+@allure.title("Открытие созданного проекта через UI")
 @allure.story("Управление проектами")
 @allure.description(
-    "Проверка отмены создания CRM-проекта "
+    "Проверка открытия созданного проекта "
     + "через пользовательский интерфейс YouGile."
 )
-def test_cancel_create_crm_project(driver) -> None:
-    """Проверяет отмену создания CRM-проекта через UI."""
+def test_open_created_project(driver) -> None:
+    """Проверяет открытие созданного проекта через UI."""
 
     login = os.environ["YOUGILE_LOGIN"]
     password = os.environ["YOUGILE_PASSWORD"]
 
     wait = WebDriverWait(driver, 15)
 
-    project_name = f"UI Cancel CRM Project {int(time.time())}"
+    project_name = f"UI Open Test Project {int(time.time())}"
 
     with allure.step("Открыть главную страницу YouGile"):
         driver.get("https://ru.yougile.com/")
@@ -77,7 +77,7 @@ def test_cancel_create_crm_project(driver) -> None:
             projects_button,
         )
 
-    with allure.step("Открыть создание проекта"):
+    with allure.step("Открыть форму создания проекта"):
         add_project_button = wait.until(
             EC.element_to_be_clickable(
                 (
@@ -88,32 +88,7 @@ def test_cancel_create_crm_project(driver) -> None:
         )
         add_project_button.click()
 
-    with allure.step("Выбрать CRM-проект"):
-        crm_project = wait.until(
-            EC.visibility_of_element_located(
-                (
-                    By.XPATH,
-                    "//*[normalize-space()='CRM-проект']",
-                )
-            )
-        )
-
-        driver.execute_script(
-            "arguments[0].click();",
-            crm_project,
-        )
-
-    with allure.step("Проверить открытие формы CRM-проекта"):
-        wait.until(
-            EC.visibility_of_element_located(
-                (
-                    By.XPATH,
-                    "//*[normalize-space()='Новый CRM-проект']",
-                )
-            )
-        )
-
-    with allure.step("Ввести название CRM-проекта"):
+    with allure.step("Ввести название проекта"):
         project_name_field = wait.until(
             EC.visibility_of_element_located(
                 (
@@ -124,33 +99,47 @@ def test_cancel_create_crm_project(driver) -> None:
         )
         project_name_field.send_keys(project_name)
 
-    with allure.step("Отменить создание CRM-проекта"):
-        cancel_button = wait.until(
-            EC.element_to_be_clickable(
+    with allure.step("Создать проект"):
+        create_project_button = wait.until(
+            EC.presence_of_element_located(
                 (
                     By.XPATH,
-                    "//*[normalize-space()='Отмена']",
+                    "//div[@role='button'][.//div[normalize-space()="
+                    + "'Добавить проект с задачами']]",
                 )
             )
         )
-        cancel_button.click()
 
-    with allure.step("Проверить закрытие формы"):
+        driver.execute_script(
+            "arguments[0].click();",
+            create_project_button,
+        )
+
+    with allure.step("Найти созданный проект"):
+        created_project = wait.until(
+            EC.visibility_of_element_located(
+                (
+                    By.XPATH,
+                    f"//*[normalize-space()='{project_name}']",
+                )
+            )
+        )
+
+    with allure.step("Открыть созданный проект"):
+        driver.execute_script(
+            "arguments[0].click();",
+            created_project,
+        )
+
+    with allure.step("Проверить открытие проекта"):
         wait.until(
-            EC.invisibility_of_element_located(
-                (
-                    By.XPATH,
-                    "//*[normalize-space()='Новый CRM-проект']",
-                )
-            )
+            lambda driver: project_name in driver.find_element(
+                By.TAG_NAME,
+                "body",
+            ).text
         )
 
-    with allure.step("Проверить отсутствие CRM-проекта"):
-        project_elements = driver.find_elements(
-            By.XPATH,
-            f"//*[normalize-space()='{project_name}']",
-        )
-
-        assert not project_elements, (
-            f"CRM-проект '{project_name}' не должен быть создан."
-        )
+        assert project_name in driver.find_element(
+            By.TAG_NAME,
+            "body",
+        ).text

@@ -1,9 +1,16 @@
 import allure
+import pytest
 import requests
 
+pytestmark = pytest.mark.api
 
-@allure.title("Создание проекта проект с пустым названием")
-@allure.description("Проверка создания проекта через API YouGile.")
+
+@pytest.mark.api
+@allure.title("Создание проекта с пустым названием")
+@allure.story("Управление проектами")
+@allure.description(
+    "Проверка создания проекта через API YouGile."
+)
 def test_create_project_empty_title(api_token: str, base_url: str) -> None:
     """Проверяет создание проекта с пустым названием."""
 

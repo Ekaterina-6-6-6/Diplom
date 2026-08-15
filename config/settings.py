@@ -1,8 +1,7 @@
-from dataclasses import dataclass
 import os
+from dataclasses import dataclass
 
 from dotenv import load_dotenv
-
 
 load_dotenv()
 
@@ -19,9 +18,7 @@ def _required_env(name: str) -> str:
     value = os.getenv(name)
 
     if not value:
-        raise ValueError(
-            f"Environment variable {name} is not set"
-        )
+        raise ValueError(f"Environment variable {name} is not set")
 
     return value
 

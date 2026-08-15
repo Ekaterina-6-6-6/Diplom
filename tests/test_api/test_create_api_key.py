@@ -1,8 +1,13 @@
 import allure
+import pytest
 import requests
 
+pytestmark = pytest.mark.api
 
+
+@pytest.mark.api
 @allure.title("Получение API-ключа с корректными данными")
+@allure.story("Авторизация")
 @allure.description("Проверка успешной авторизации через API YouGile.")
 def test_create_api_key(
     base_url: str,

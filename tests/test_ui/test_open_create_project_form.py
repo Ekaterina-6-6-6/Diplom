@@ -2,27 +2,16 @@ import os
 
 import allure
 import pytest
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-
 pytestmark = pytest.mark.ui
 
 
-def test_open_yougile(driver) -> None:
-    """Проверяет открытие страницы YouGile."""
-
-    driver.get("https://ru.yougile.com")
-
-    assert driver.title == (
-        "Современная система управления проектами и задачами. "
-        "Бесплатная онлайн-версия"
-    )
-
-
+@pytest.mark.ui
 @allure.title("Открытие формы создания проекта")
+@allure.story("Управление проектами")
 @allure.description(
     "Проверка открытия формы создания нового проекта в YouGile."
 )

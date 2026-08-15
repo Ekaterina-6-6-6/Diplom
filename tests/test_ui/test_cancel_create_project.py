@@ -3,31 +3,19 @@ import time
 
 import allure
 import pytest
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-
 pytestmark = pytest.mark.ui
-
-
-def test_open_yougile(driver) -> None:
-    """Проверяет открытие страницы YouGile."""
-
-    driver.get("https://ru.yougile.com")
-
-    assert driver.title == (
-        "Современная система управления проектами и задачами. "
-        "Бесплатная онлайн-версия"
-    )
 
 
 @pytest.mark.ui
 @allure.title("Отмена создания проекта")
+@allure.story("Управление проектами")
 @allure.description(
     "Проверка отмены создания нового проекта"
-    "через пользовательский интерфейс YouGile."
+    + "через пользовательский интерфейс YouGile."
 )
 def test_cancel_create_project(driver) -> None:
     """Проверяет отмену создания проекта через UI."""

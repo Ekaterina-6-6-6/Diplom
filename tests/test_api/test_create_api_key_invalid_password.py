@@ -1,10 +1,14 @@
 import allure
+import pytest
 import requests
-
 
 from config.settings import settings
 
+pytestmark = pytest.mark.api
 
+
+@pytest.mark.api
+@allure.story("Авторизация")
 @allure.title("Получение API-ключа с неверным паролем")
 @allure.description(
     "Проверка отказа в авторизации при использовании неверного пароля."

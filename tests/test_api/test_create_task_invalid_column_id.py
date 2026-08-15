@@ -1,13 +1,17 @@
 import allure
-
+import pytest
 
 from utils.api_client import YouGileApiClient
 
+pytestmark = pytest.mark.api
 
+
+@pytest.mark.api
 @allure.title("Создание задачи с несуществующей колонкой")
+@allure.story("Управление задачами")
 @allure.description(
     "Проверка отказа при создании задачи с несуществующим ID колонки "
-    "через API YouGile."
+    + "через API YouGile."
 )
 def test_create_task_invalid_column_id(
     api_client: YouGileApiClient,

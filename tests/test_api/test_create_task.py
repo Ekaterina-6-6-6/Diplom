@@ -1,9 +1,14 @@
 import allure
+import pytest
 
 from utils.api_client import YouGileApiClient
 
+pytestmark = pytest.mark.api
 
+
+@pytest.mark.api
 @allure.title("Создание задачи")
+@allure.story("Управление задачами")
 @allure.description(
     "Проверка создания задачи в колонке через API YouGile."
 )
@@ -21,8 +26,7 @@ def test_create_task(
 
     with allure.step("Проверить статус-код ответа"):
         assert response.status_code == 201, (
-            "Задача не создана: "
-            f"{response.status_code} {response.text}"
+            f"Задача не создана: {response.status_code} {response.text}"
         )
 
     with allure.step("Проверить ID созданной задачи"):
